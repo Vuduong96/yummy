@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
+import { Link } from "react-router-dom";
 
 function Searched() {
     
@@ -9,11 +10,19 @@ function Searched() {
     let params = useParams();
 
     const getSearched = async(name) => {
+
         const data = await fetch(
-            `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&query=${name}`
-            );
+          `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&query=${name}`
+          );
+
         const recipes = await data.json();
+
         setSearchedRecipes(recipes.results);
+      
+        // const data = await fetch(
+        //     `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&query=${name}`
+        //     );
+        
     };
 
     useEffect(() => {
@@ -22,11 +31,13 @@ function Searched() {
 
   return (
     <Grid>
-        {searchedRecipes.map((item) => {
+        {searchedRecipes?.map((item) => {
             return (
                 <Card key={item.id}>
-                    <img src={item.image} alt=""/>
-                    <h4>{item.title}</h4>
+                  <Link to={'/recipe/' + item.id}>
+                  <img src={item.image} alt=""/>
+                  <h4>{item.title}</h4>
+                  </Link>
                 </Card>
             )
         })}
